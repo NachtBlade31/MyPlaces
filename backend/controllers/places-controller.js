@@ -1,6 +1,8 @@
+const { v4: uuidv4 } = require('uuid');
+
 const HttpError=require('../models/http-error');
 
-const DUMMY_PLACES=[
+let DUMMY_PLACES=[
     {
         id:'p1',
         title:'Empire State Building',
@@ -27,18 +29,58 @@ const getPlaceById=(req,res,next)=>{
 
 }
 
-const getPlaceByUserId=(req,res,next)=>{
+const getPlacesByUserId=(req,res,next)=>{
     const userId=req.params.uid;
-    const user=DUMMY_PLACES.find(u=>{
+    const users=DUMMY_PLACES.filter(u=>{
         return u.creator===userId;
     });
-    if(!user){
+    if(!users|| users.length===0){
 
-        return next(new HttpError("Could not find a place for the provided user id",404)) ;
+        return next(new HttpError("Could not find a places for the provided user id",404)) ;
     }
     
-    res.json({user});
+    res.json({users});
+}
+
+const createPlace=(req,res,next)=>{
+
+    const {title,description,coordinates,address,creator}=req.body;
+    const createdPlace={
+        id:uuidv4(),
+        title,
+        description,
+        location:coordinates,
+        address,
+        creator
+    };
+    DUMMY_PLACES.push(createdPlace);
+    res.status(201).json({createdPlace});
+}
+
+const UpdatePlaceById=(req,res,next)=>{
+
+    const placeId=req.params.pid;
+    const {title,description}=req.body;
+    const updatePlace={...DUMMY_PLACES.find(p=>p.id===placeId)};
+    const placeIndex=DUMMY_PLACES.findIndex(p=>p.id===placeId)
+    updatePlace.title=title;
+    updatePlace.description=description;
+
+    DUMMY_PLACES[placeIndex]=updatePlace;
+    res.status(200).json({place:updatePlace});
+
+
+}
+
+const deletePlaceById=(req,res,next)=>{
+    const placeId=req.params.pid;
+    DUMMY_PLACES=DUMMY_PLACES.filter(p=>p.id!==placeId);
+    res.status(200).json({message:"Deleted Place."});
+
 }
 
 exports.getPlaceById=getPlaceById;
-exports.getPlaceByUserId=getPlaceByUserId;
+exports.getPlacesByUserId=getPlacesByUserId;
+exports.createPlace=createPlace;
+exports.UpdatePlaceById=UpdatePlaceById;
+exports.deletePlaceById=deletePlaceById;
