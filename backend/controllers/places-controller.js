@@ -3,6 +3,7 @@ const {validationResult} =require('express-validator');
 
 const HttpError=require('../models/http-error');
 const getCoordsForAddress =require('../utils/location');
+const Place=require('../models/place');
 let DUMMY_PLACES=[
     {
         id:'p1',
@@ -17,16 +18,23 @@ let DUMMY_PLACES=[
     }
 ]
 
-const getPlaceById=(req,res,next)=>{
+const getPlaceById= async (req,res,next)=>{
     const placeId=req.params.pid
-    const place=DUMMY_PLACES.find(p=>{
-        return p.id===placeId;
-    });
+    let place;
+    try{
+        place=await Place.findById(placeId);
+    }
+    catch(err){
+        const error=new HttpError("Something went wrong.Could not find a place",500);
+        return next(error);
+    }
+    
     if(!place){
 
-        throw new HttpError("Could not find a place for the provided id",404);;
+        const error= new HttpError("Could not find a place for the provided id",404);
+        return next(error);
     }
-    res.json({place});
+    res.json({place:place.toObject({getters:true}) });
 
 }
 
@@ -59,15 +67,24 @@ const createPlace= async (req,res,next)=>{
        return next(error);
     }
     
-    const createdPlace={
-        id:uuidv4(),
+    const createdPlace=new Place({
         title,
+        address,
         description,
         location:coordinates,
-        address,
+        image:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Fnature%2F&psig=AOvVaw1rXNR0ystpHU3XiF8zJLEi&ust=1613761060815000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJiArMiO9O4CFQAAAAAdAAAAABAD",
         creator
-    };
-    DUMMY_PLACES.push(createdPlace);
+    });
+
+    try{
+        await createdPlace.save();
+    }
+    catch(err){
+        console.log(err)
+        const error=new HttpError("Creating place failed,please try again",500);
+        return next(error);
+    }
+    
     res.status(201).json({createdPlace});
 }
 
