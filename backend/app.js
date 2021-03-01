@@ -26,7 +26,8 @@ app.use((error,req,res,next)=>{
     res.json({message:error.message ||"An unknown error has occuered"})
 })
 mongoose
-.connect('<MongoDB_url>')
+// Correct the mongodb url here 
+.connect('<ADD_MONGODB_URL>', {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>{
     app.listen(5000);
 })
