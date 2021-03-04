@@ -68,7 +68,7 @@ const createPlace= async (req,res,next)=>{
         address,
         description,
         location:coordinates,
-        image:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fimages%2Fsearch%2Fnature%2F&psig=AOvVaw1rXNR0ystpHU3XiF8zJLEi&ust=1613761060815000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJiArMiO9O4CFQAAAAAdAAAAABAD",
+        image:"https://images.unsplash.com/photo-1538370965046-79c0d6907d47?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Nnx8fGVufDB8fHw%3D&w=1000&q=80",
         creator
     });
 

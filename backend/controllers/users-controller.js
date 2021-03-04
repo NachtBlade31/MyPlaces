@@ -72,7 +72,7 @@ const login=async (req,res,next)=>{
         const error=new HttpError("Invalid user. Could not log you in.",401)
         return next(error);
     }
-    res.json({message:"Logged in"})
+    res.json({message:"Logged in",user:existingUser.toObject({getters:true})})
 
 }
 
