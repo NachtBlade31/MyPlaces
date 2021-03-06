@@ -5,6 +5,7 @@ import Button from '../../shared/components/FormElements/Button';
 import Card from '../../shared/components/UIElements/Card';
 import  {VALIDATOR_MINLENGTH,VALIDATOR_MAXLENGTH, VALIDATOR_EMAIL,VALIDATOR_REQUIRE} from '../../shared/utils/validators';
 import {useForm} from '../../shared/hooks/form-hook';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import {useHttpClient} from '../../shared/hooks/http-hooks';
 import {AuthContext} from '../../shared/context/auth-context';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
@@ -104,7 +105,7 @@ catch(err){
     <form onSubmit={authSubmitHandler}>
         {!isLoginMode &&<Input  element="input" id="name" type="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText="Please Enter the Name" onInput={inputHandler} />}
         <Input id='email' element="input" type="email" label="EMAIL" validators={[VALIDATOR_EMAIL()]} errorText="Please enter a valid EMAIL address" onInput={inputHandler}  />
-
+        {!isLoginMode && <ImageUpload id="image"/>}
         <Input id='password' element="input" type="password" label="PASSWORD" validators={[VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(16)]} errorText="Please enter a Password (min 6 , max 16)" onInput={inputHandler} />
 
         <Button type="submit" disabled={!formState.isValid}>{isLoginMode? 'Login':'Signup'}</Button>
