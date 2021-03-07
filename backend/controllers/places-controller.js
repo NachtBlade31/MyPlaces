@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const { v4: uuidv4 } = require('uuid');
 const {validationResult} =require('express-validator');
+const fs=require('fs');
 
 const HttpError=require('../models/http-error');
 const getCoordsForAddress =require('../utils/location');
@@ -68,7 +69,7 @@ const createPlace= async (req,res,next)=>{
         address,
         description,
         location:coordinates,
-        image:"https://images.unsplash.com/photo-1538370965046-79c0d6907d47?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Nnx8fGVufDB8fHw%3D&w=1000&q=80",
+        image:req.file.path,
         creator
     });
 
@@ -153,7 +154,7 @@ const deletePlaceById=async (req,res,next)=>{
     if(!place){
         return next(new HttpError("Could not find the place for this id. Please try again",404)) ;
     }
-
+    const imagePath=place.image;
     try{
         const sess=await mongoose.startSession();
         sess.startTransaction();
@@ -165,6 +166,9 @@ const deletePlaceById=async (req,res,next)=>{
     catch(err){
         return next(new HttpError("Something went wrong. Could not Delete the place. Please try again",500)) ;
     }
+    fs.unlink(imagePath,err=>{
+        console.log(err);
+    });
 
     res.status(200).json({message:"Deleted Place."});
 

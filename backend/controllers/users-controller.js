@@ -42,7 +42,7 @@ const signup=async (req,res,next)=>{
     const createdUser=new User({
         name,
         email,
-        image:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Shaqi_jrvej.jpg/1200px-Shaqi_jrvej.jpg",
+        image:req.file.path,
         password,
         places:[]
     });
