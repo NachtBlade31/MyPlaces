@@ -33,9 +33,10 @@ const Auth=props=>{
         if(!isLoginMode){
             setFormData({
                 ...formState.inputs,
-                name:undefined
+                name:undefined,
+                image:undefined
             },
-            formState.inputs.email.isValid&&formState.inputs.password.isValid);
+            formState.inputs.email.isValid && formState.inputs.password.isValid);
         }
         else{
             setFormData({
@@ -43,6 +44,10 @@ const Auth=props=>{
                 name:{
                     value:'',
                     isValid:false
+                },
+                image:{
+                    value:null,
+                    isValid: false
                 }
 
             },false);
@@ -52,6 +57,7 @@ const Auth=props=>{
 
     const authSubmitHandler=async event=>{
     event.preventDefault();
+    console.log(formState.inputs)
 
     if(isLoginMode){
 
@@ -105,7 +111,7 @@ catch(err){
     <form onSubmit={authSubmitHandler}>
         {!isLoginMode &&<Input  element="input" id="name" type="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText="Please Enter the Name" onInput={inputHandler} />}
         <Input id='email' element="input" type="email" label="EMAIL" validators={[VALIDATOR_EMAIL()]} errorText="Please enter a valid EMAIL address" onInput={inputHandler}  />
-        {!isLoginMode && <ImageUpload id="image"/>}
+        {!isLoginMode && <ImageUpload id="image" onInput={inputHandler}/>}
         <Input id='password' element="input" type="password" label="PASSWORD" validators={[VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(16)]} errorText="Please enter a Password (min 6 , max 16)" onInput={inputHandler} />
 
         <Button type="submit" disabled={!formState.isValid}>{isLoginMode? 'Login':'Signup'}</Button>
