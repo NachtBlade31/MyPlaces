@@ -72,7 +72,7 @@ const Auth=props=>{
             'Content-Type':'application/json'
        } 
     );
-    auth.login(responseData.user.id);
+    auth.login(responseData.userId,responseData.token);
 }
 catch(err){
     console.log(err)
@@ -81,16 +81,15 @@ catch(err){
     }
     else{
         try{
-        const responseData=await sendRequest('http://localhost:5000/api/users/signup','POST',JSON.stringify({
-           name:formState.inputs.name.value,
-           email:formState.inputs.email.value,
-           password:formState.inputs.password.value
-       }),
-       {
-            'Content-Type':'application/json'
-       } 
+        const formdata=new FormData()
+        formdata.append('email',formState.inputs.email.value);
+        formdata.append('password',formState.inputs.password.value);
+        formdata.append('name',formState.inputs.name.value);
+        formdata.append('image',formState.inputs.image.value);
+        const responseData=await sendRequest('http://localhost:5000/api/users/signup','POST',
+       formdata
     );
-    auth.login(responseData.user.id);
+    auth.login(responseData.userId,responseData.token);
 
         }
         catch(err){
@@ -111,7 +110,7 @@ catch(err){
     <form onSubmit={authSubmitHandler}>
         {!isLoginMode &&<Input  element="input" id="name" type="text" label="Name" validators={[VALIDATOR_REQUIRE()]} errorText="Please Enter the Name" onInput={inputHandler} />}
         <Input id='email' element="input" type="email" label="EMAIL" validators={[VALIDATOR_EMAIL()]} errorText="Please enter a valid EMAIL address" onInput={inputHandler}  />
-        {!isLoginMode && <ImageUpload id="image" onInput={inputHandler}/>}
+        {!isLoginMode && <ImageUpload id="image" onInput={inputHandler} errorText="Please provide an image for he profile" />}
         <Input id='password' element="input" type="password" label="PASSWORD" validators={[VALIDATOR_MINLENGTH(6),VALIDATOR_MAXLENGTH(16)]} errorText="Please enter a Password (min 6 , max 16)" onInput={inputHandler} />
 
         <Button type="submit" disabled={!formState.isValid}>{isLoginMode? 'Login':'Signup'}</Button>
