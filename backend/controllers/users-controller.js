@@ -70,7 +70,7 @@ const signup=async (req,res,next)=>{
 
     let token;
     try{
-        token=jwt.sign({userId:createdUser.id,email:createdUser.email},"Super Secret. Dont Share",{expiresIn:'1d'})
+        token=jwt.sign({userId:createdUser.id,email:createdUser.email},process.env.JWT_KEY,{expiresIn:'1d'})
     }
     catch(err){
         const error=new HttpError("Sign up failed,please try again",500);
@@ -111,7 +111,7 @@ const login=async (req,res,next)=>{
 
     let token;
     try{
-        token=jwt.sign({userId:existingUser.id,email:existingUser.email},"Super Secret. Dont Share",{expiresIn:'1d'})
+        token=jwt.sign({userId:existingUser.id,email:existingUser.email},process.env.JWT_KEY,{expiresIn:'1d'})
     }
     catch(err){
         const error=new HttpError("Sign in failed,please try again",500);

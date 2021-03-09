@@ -1,0 +1,10 @@
+{
+    "env":{
+        "DB_USER":"kshitizb31",
+        "DB_PASSWORD":"31101995",
+        "DB_NAME":"Places",
+        "LOCATION_IQ_API_KEY":"pk.d9c0cfd4fa4068936d1582c3958dee43",
+        "JWT_KEY":"Super Secret. Dont Share"
+
+    }
+}

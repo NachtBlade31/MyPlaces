@@ -1,6 +1,6 @@
 const axios=require('axios');
 const HttpError=require('../models/http-error');
-const API_KEY="ADD_API_KEY_FOR_LOCATIONIQ";
+const API_KEY=process.env.LOCATION_IQ_API_KEY;
 
 
 const getCoordsForAddress=async address=>{

@@ -45,7 +45,7 @@ app.use((error,req,res,next)=>{
 })
 mongoose
 // Correct the mongodb url here 
-.connect('<ADD_MONGODB_URL>', {useNewUrlParser: true, useUnifiedTopology: true})
+.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.caihn.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>{
     app.listen(5000);
 })
